@@ -1,43 +1,42 @@
 package org.vaadin.addons.gl0b3.simplecalendar;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.HasTheme;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 
-import elemental.json.Json;
-import elemental.json.JsonArray;
-
+/**
+ * Year Calendar
+ * @author Károly Kótay-Szabó (gl0b3)
+ */
 @Tag("year-calendar")
 @JsModule("@gl0b3/simple-calendar")
-@NpmPackage(value = "@gl0b3/simple-calendar", version = "1.0.1")
-public class YearCalendar extends Component implements HasTheme, HasElement {
+@NpmPackage(value = "@gl0b3/simple-calendar", version = "1.0.2")
+public class YearCalendar extends AbstractSimpleCalendar {
 
-	private int year;
-	private String locale;
-	private boolean yearIsFirst;
-	private boolean showOtherMonthDays;
-	private WeekdayType weekdayType;
-
+	/**
+	 * Default constructor with default field values
+	 * After that you have to call {@link AbstractSimpleCalendar#refresh()} to send values to the client.
+	 */
 	public YearCalendar() {
+		super();
 	}
 
+	/**
+	 * Constructor the year with the given year number, language locale and yearIsFirst order toggle
+	 *
+	 * @param year        {@link int} the base year of the calendar
+	 * @param locale      {@link String} the language locale
+	 * @param yearIsFirst {@link boolean} if <code>true</code> the year is the first, the month is the second in the header
+	 */
 	public YearCalendar(int year, String locale, boolean yearIsFirst) {
+		super();
 		getElement().setAttribute("year", String.valueOf(year));
 		getElement().setAttribute("locale", locale);
 		getElement().setAttribute("year-is-first", yearIsFirst);
 	}
 
 	/**
-	 * The Year Calendar (and the Month Calendar) based on this year
+	 * The Year Calendar and the Month Calendar based on this year
 	 *
 	 * @param year {@link int}, ie: 2024
 	 * @return {@link YearCalendar} this object
@@ -48,7 +47,7 @@ public class YearCalendar extends Component implements HasTheme, HasElement {
 	}
 
 	/**
-	 * The locale of the Year Calendar (and of the Month Calendar). It's important for the naming and formatting convetions.
+	 * The locale of the Year Calendar and Month Calendar. It's important for the naming and formatting convetions.
 	 * <p>
 	 * For supported locales see: <a href="https://github.com/moment/luxon/blob/master/docs/intl.md">Luxon Intl.md docs</a>
 	 *
@@ -73,6 +72,17 @@ public class YearCalendar extends Component implements HasTheme, HasElement {
 	}
 
 	/**
+	 * Set the days and month naming format. For formats see: {@link DayNameFormat}.
+	 *
+	 * @param dayNameFormat {@link DayNameFormat}
+	 * @return this {@link YearCalendar}
+	 */
+	public YearCalendar setDayNameFormat(DayNameFormat dayNameFormat) {
+		this.dayNameFormat = dayNameFormat;
+		return this;
+	}
+
+	/**
 	 * In a month the week's starting or ending days can be from the previous or the next month.
 	 * If <code>true</code> the whole weeks will be shown, <code>false</code> only days which are in the current month will be shown
 	 * Ie: first week of October 2024 begins on September 30, and last week ends with November 1, 2 and 3.
@@ -88,45 +98,6 @@ public class YearCalendar extends Component implements HasTheme, HasElement {
 		return this;
 	}
 
-	public YearCalendar setWeekdayType(WeekdayType weekdayType) {
-		this.weekdayType = weekdayType;
-		return this;
-	}
-
-	public void modifyYear(int year) {
-		getElement().callJsFunction("setYear", year);
-	}
-
-	public void modifyLocale(String lcoale) {
-		getElement().callJsFunction("setLocale", locale);
-	}
-
-	public void modifyYearIsFirst(boolean yearIsFirst) {
-		getElement().callJsFunction("setYearIsFirst", yearIsFirst);
-	}
-
-	public void modifyShowOtherMonthDays(boolean showOtherMonthDays) {
-		getElement().callJsFunction("setShowOtherMonthDays", showOtherMonthDays);
-	}
-
-	public void modifyWeekdayType(WeekdayType weekdayType) {
-		if ( weekdayType != null ) {
-			getElement().callJsFunction("setWeekdayType", weekdayType.getValue());
-		}
-	}
-
-	/**
-	 * Call this method if you want to refresh all the class fields on the client.
-	 * Otherwise, call the another refresh method with parameters
-	 */
-	public void refresh() {
-		getElement().setAttribute("year", String.valueOf(this.year));
-		getElement().setAttribute("locale", this.locale);
-		getElement().setAttribute("year-is-first", this.yearIsFirst);
-		getElement().setAttribute("show-other-month-days", this.showOtherMonthDays);
-		getElement().setAttribute("weekday-type", this.weekdayType.getValue());
-	}
-
 	/**
 	 * Call this method if you want to refresh the client componet by the given parameters
 	 *
@@ -136,79 +107,20 @@ public class YearCalendar extends Component implements HasTheme, HasElement {
 	 *                           opposite
 	 * @param showOtherMonthDays {@link boolean} if it's <code>true</code> whole weeks will be shown at the start or at the end of the month,
 	 *                           <code>false</code> only date which are in the current month will be shown
+	 * @param dayNameFormat      {@link DayNameFormat} the format of the days format (NARROW, SHORT, LONG)
 	 */
-	public void refresh(int year, String locale, boolean yearIsFirst, boolean showOtherMonthDays) {
+	public void refresh(int year, String locale, boolean yearIsFirst, boolean showOtherMonthDays, DayNameFormat dayNameFormat) {
+		this.year = year;
+		this.locale = locale;
+		this.yearIsFirst = yearIsFirst;
+		this.showOtherMonthDays = showOtherMonthDays;
+		this.dayNameFormat = dayNameFormat;
 		getElement().setAttribute("year", String.valueOf(year));
 		getElement().setAttribute("locale", locale);
 		getElement().setAttribute("year-is-first", yearIsFirst);
 		getElement().setAttribute("show-other-month-days", showOtherMonthDays);
-	}
-
-	/**
-	 * Remove style class from the TD cells which have the given cellType
-	 *
-	 * @param cellType  {@link String} the cellType: "weekday" or "weekend"
-	 * @param className {@link String} the CSS style class name which have to be removed
-	 */
-	public void removeClassFromCellByType(String cellType, String className) {
-		getElement().executeJs("setTimeout(() => { this.removeClassFromCellByType($0, $1); })", cellType, className);
-	}
-
-	/**
-	 * Add the given className style class to all the days TD cells in the year.
-	 *
-	 * @param dates     {@link List<Date>} which cells have to me modified
-	 * @param className {@link String} the CSS style class which have to be added to the cell
-	 */
-	public void addClassToCellByDates(List<Date> dates, String className) {
-		if ( dates != null ) {
-			List<String> convertedDates = dates.stream().map(date -> date.toInstant().atZone(ZoneId.systemDefault()).toString()).toList();
-			getElement().executeJs("setTimeout(() => { this.addClassToCellByDates($0, $1); })", convertToJsonArray(convertedDates), className);
+		if ( this.dayNameFormat != null ) {
+			getElement().setAttribute("weekday-type", dayNameFormat.getValue());
 		}
 	}
-
-	/**
-	 * Add the given className style class to all the days TD cells in the year.
-	 *
-	 * @param dates     {@link List<LocalDate>} which cells have to me modified
-	 * @param className {@link String} the CSS style class which have to be added to the cell
-	 */
-	public void addClassToCellByLocalDates(List<LocalDate> dates, String className) {
-		if ( dates != null ) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			List<String> convertedDates = dates.stream().map(sdf::format).toList();
-			getElement().callJsFunction("addClassToCellByDates", convertToJsonArray(convertedDates), className);
-		}
-	}
-
-	/**
-	 * Convert {@link List<String>} dates into {@link JsonArray}
-	 *
-	 * @param stringDates {@link List<String>} dates which have to be converted into {@link JsonArray}
-	 * @return the converted {@link JsonArray}
-	 */
-	private JsonArray convertToJsonArray(List<String> stringDates) {
-		JsonArray jsonDateArray = Json.createArray();
-		for ( int i = 0; i < stringDates.size(); i++ ) {
-			jsonDateArray.set(i, stringDates.get(i));
-		}
-		return jsonDateArray;
-	}
-
-	public enum WeekdayType {
-		NARROW("narrow"),
-		SHORT("short"),
-		LONG("long");
-
-		private final String value;
-
-		WeekdayType(String value) {
-			this.value = value;
-		}
-
-		public String getValue() {
-			return this.value;
-		}
-	}
-
 }
