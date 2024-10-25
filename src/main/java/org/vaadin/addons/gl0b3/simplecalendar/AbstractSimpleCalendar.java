@@ -114,7 +114,7 @@ public abstract class AbstractSimpleCalendar extends Component implements HasThe
 	 * @param className {@link String} the CSS style class name which have to be removed
 	 */
 	public void removeClassFromCellByType(String cellType, String className) {
-		getElement().executeJs("setTimeout(() => { this.removeClassFromCellByType($0, $1); })", cellType, className);
+		getElement().executeJs("setTimeout(() => { removeClassFromCellByType($0, $1); })", cellType, className);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public abstract class AbstractSimpleCalendar extends Component implements HasThe
 	public void addClassToCellByDates(List<Date> dates, String className) {
 		if ( dates != null ) {
 			List<String> convertedDates = dates.stream().map(date -> date.toInstant().atZone(ZoneId.systemDefault()).toString()).toList();
-			getElement().executeJs("setTimeout(() => { this.addClassToCellByDates($0, $1); })", CalendarUtils.convertToJsonArray(convertedDates), className);
+			getElement().executeJs("setTimeout(() => { addClassToCellByDates($0, $1); })", CalendarUtils.convertToJsonArray(convertedDates), className);
 		}
 	}
 
