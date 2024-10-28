@@ -1,6 +1,6 @@
 # Simple Calendar Flow (for Vaadin 24.4+)
 
-Version: 1.0.1
+Version: 1.0.2
 
 Author: Károly Kótay-Szabó (gl0b3)
 
@@ -32,7 +32,7 @@ In your project's `pom.xml` you have to put this dependency into your `<project>
 <dependency>
     <groupId>org.vaadin.addons.gl0b3</groupId>
     <artifactId>simple-calendar-flow</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 

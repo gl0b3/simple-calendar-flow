@@ -188,7 +188,7 @@ public class MonthCalendar extends AbstractSimpleCalendar {
 	/**
 	 * Add the given className style class to all the days TD cells in the year.
 	 *
-	 * @param dates     {@link List < Date >} which cells have to me modified
+	 * @param dates     {@link List<Date>} which cells have to me modified
 	 * @param className {@link String} the CSS style class which have to be added to the cell
 	 */
 	public void addClassToCellByDates(List<Date> dates, String className) {

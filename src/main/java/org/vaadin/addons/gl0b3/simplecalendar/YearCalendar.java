@@ -142,7 +142,7 @@ public class YearCalendar extends AbstractSimpleCalendar {
 	/**
 	 * Add the given className style class to all the days TD cells in the year.
 	 *
-	 * @param dates     {@link List < Date >} which cells have to me modified
+	 * @param dates     {@link List<Date>} which cells have to me modified
 	 * @param className {@link String} the CSS style class which have to be added to the cell
 	 */
 	public void addClassToCellByDates(List<Date> dates, String className) {
@@ -155,7 +155,7 @@ public class YearCalendar extends AbstractSimpleCalendar {
 	/**
 	 * Add the given className style class to all the days TD cells in the year.
 	 *
-	 * @param dates     {@link List< LocalDate >} which cells have to me modified
+	 * @param dates     {@link List<LocalDate>} which cells have to me modified
 	 * @param className {@link String} the CSS style class which have to be added to the cell
 	 */
 	public void addClassToCellByLocalDates(List<LocalDate> dates, String className) {
