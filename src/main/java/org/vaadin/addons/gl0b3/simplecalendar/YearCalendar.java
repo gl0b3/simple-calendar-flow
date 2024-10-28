@@ -1,5 +1,11 @@
 package org.vaadin.addons.gl0b3.simplecalendar;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
@@ -121,6 +127,42 @@ public class YearCalendar extends AbstractSimpleCalendar {
 		getElement().setAttribute("show-other-month-days", showOtherMonthDays);
 		if ( this.dayNameFormat != null ) {
 			getElement().setAttribute("weekday-type", dayNameFormat.getValue());
+		}
+	}
+	/**
+	 * Remove style class from the TD cells which have the given cellType
+	 *
+	 * @param cellType  {@link String} the cellType: "weekday" or "weekend"
+	 * @param className {@link String} the CSS style class name which have to be removed
+	 */
+	public void removeClassFromCellByType(String cellType, String className) {
+		getElement().executeJs("setTimeout(() => { this.removeClassFromCellByType($0, $1); })", cellType, className);
+	}
+
+	/**
+	 * Add the given className style class to all the days TD cells in the year.
+	 *
+	 * @param dates     {@link List < Date >} which cells have to me modified
+	 * @param className {@link String} the CSS style class which have to be added to the cell
+	 */
+	public void addClassToCellByDates(List<Date> dates, String className) {
+		if ( dates != null ) {
+			List<String> convertedDates = dates.stream().map(date -> date.toInstant().atZone(ZoneId.systemDefault()).toString()).toList();
+			getElement().executeJs("setTimeout(() => { this.addClassToCellByDates($0, $1); })", CalendarUtils.convertToJsonArray(convertedDates), className);
+		}
+	}
+
+	/**
+	 * Add the given className style class to all the days TD cells in the year.
+	 *
+	 * @param dates     {@link List< LocalDate >} which cells have to me modified
+	 * @param className {@link String} the CSS style class which have to be added to the cell
+	 */
+	public void addClassToCellByLocalDates(List<LocalDate> dates, String className) {
+		if ( dates != null ) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			List<String> convertedDates = dates.stream().map(sdf::format).toList();
+			getElement().executeJs("setTimeout(() => { this.addClassToCellByDates($0, $1); })", CalendarUtils.convertToJsonArray(convertedDates), className);
 		}
 	}
 }
